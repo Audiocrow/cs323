@@ -1,1 +1,1 @@
-# cs323
+# Various class assignments/projects
