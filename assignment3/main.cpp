@@ -15,7 +15,7 @@ int main() {
 	char reservedWords[NUM_RESERVED][10] = { "cout<<", "for", "int", "while" };
 	const int NUM_SPECIAL = 8;
 	char special[NUM_SPECIAL][3] = { "=", "*", "-", ";", "(", ")", "<=", "+" };
-	regex expr("(.*?)(?:\\s|$)"); //Anything followed by a space or endline
+	regex expr("([^ ]+)(?:\\s|$)"); //Anything followed by a space or endline
 	while(1) {
 		cout << "Enter a statement:";
 		string input;
