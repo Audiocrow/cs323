@@ -16,7 +16,7 @@ int main() {
 	const int NUM_SPECIAL = 8;
 	char special[NUM_SPECIAL][3] = { "=", "*", "-", ";", "(", ")", "<=", "+" };
 	regex expr("\\S+"); //Anything followed by a space or endline
-	set<string> myTokens;
+	//set<string> myTokens;
 	while(1) {
 		cout << "Enter a statement:";
 		string input;
@@ -25,10 +25,10 @@ int main() {
 		for(auto myRegIt=sregex_iterator(input.begin(), input.end(), expr); myRegIt != sregex_iterator(); ++myRegIt) {
 			string token = (static_cast<smatch>(*myRegIt)).str();
 			//If we've already looked at this token, don't identify it again
-			auto found = myTokens.emplace(token);
-			if(!found.second) {
-				continue;
-			}
+			//auto found = myTokens.emplace(token);
+			//if(!found.second) {
+				//continue;
+			//}
 			//Check if this token is a reserved word
 			cout << token << "\t";
 			bool typeFound=false;
@@ -65,7 +65,7 @@ int main() {
 			if(!typeFound) { cout << "not identifier"; }
 			cout << endl;
 		}
-		myTokens.clear();
+		//myTokens.clear();
 		cout << "Continue(y/n)?";
 		char c;
 		cin >> c;

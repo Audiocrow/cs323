@@ -22,12 +22,13 @@ bool populateWords(map<string,string>& words, string filename) {
 	}
 	while(ifs.good()) {
 		string line;
-		getline(ifs, line);
+		getline(ifs, line, '$');
+		line += "$";
 		smatch match;
 		//Match a word [identified by some combination of letters (at least 1)
 		//followed by an optional combination of digits] with its expression
 		//(anything following the = which follows the word)
-		if(regex_match(line, match, regex("([a-zA-Z]+(?:\\d*)?)=(.*)"))) {
+		if(regex_match(line, match, regex("\\s*([a-zA-Z]+(?:\\d*)?)=([^\\s]*)"))) {
 			if(match.str(1).length() > 0 && match.str(2).length() > 0)
 				words.emplace(match.str(1), match.str(2));
 		}
@@ -39,9 +40,39 @@ bool populateWords(map<string,string>& words, string filename) {
 int main() {
 	map<string,string> words;
 	populateWords(words, "data.txt");
-	//Test code to see if the map populates correctly:
+	//Using -1 as a "null state" sentinel:
+	const int table[][2] = { {1,3},
+							{1,2},
+							{-1,-1},
+							{-1,3} };
+	//Evaluate each word:
 	for(auto word : words) {
-		cout << word.first << "=" << word.second << endl;
+		int state=0;
+		int done=0; //0=not done, 1=invalid, 2=valid
+		for(int i=0; i<word.second.length(); i++) {
+			switch(word.second.at(i)) {
+				case 'a':
+					state = table[state][0];
+					if(state == -1) done=1;
+					break;
+				case 'b':
+					state = table[state][1];
+					if(state == -1) done=1;
+					break;
+				case '$':
+					if(state == 2 || state == 3)
+						done=2;
+					else done=1;
+					break;
+				default:
+					done=1;
+					break;
+			}
+			if(done != 0) { break; }
+		}
+		if(done == 1)
+			cout << word.first << " is invalid." << endl;
+		else cout << word.first << " is valid." << endl;
 	}
 	return 0;
 }
