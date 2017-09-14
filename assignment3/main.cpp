@@ -3,9 +3,9 @@
 // Daniel Domingo
 // Sean Wulwick
 
-#include <exception>
 #include <iostream>
 #include <regex>
+#include <set>
 #include <string>
 
 using namespace std;
@@ -16,6 +16,7 @@ int main() {
 	const int NUM_SPECIAL = 8;
 	char special[NUM_SPECIAL][3] = { "=", "*", "-", ";", "(", ")", "<=", "+" };
 	regex expr("\\S+"); //Anything followed by a space or endline
+	set<string> myTokens;
 	while(1) {
 		cout << "Enter a statement:";
 		string input;
@@ -23,6 +24,11 @@ int main() {
 		//Separate all tokens by space/endline via regex
 		for(auto myRegIt=sregex_iterator(input.begin(), input.end(), expr); myRegIt != sregex_iterator(); ++myRegIt) {
 			string token = (static_cast<smatch>(*myRegIt)).str();
+			//If we've already looked at this token, don't identify it again
+			auto found = myTokens.emplace(token);
+			if(!found.second) {
+				continue;
+			}
 			//Check if this token is a reserved word
 			cout << token << "\t";
 			bool typeFound=false;
@@ -43,24 +49,23 @@ int main() {
 					}
 				}
 				if(!typeFound) {
-					//Attempt to cast the token into a number - if it succeeds, it is a number
-					try {
-						double value = stod(token);
+					//Check if the token is a number (doubles are ok)
+					if(regex_match(token, regex("\\d+(?:.\\d+)?"))) {
 						cout << "number";
 						typeFound=true;
 					}
-					catch(invalid_argument&) {
-						//Check if the token starts with some amount or mix of letters and underscores
-						if(regex_match(token, regex("(?:\\w|_)+.*"))) {
-							cout << "identifier";
-							typeFound=true;
-						}
+					//Otherwise check if it is an identifier (at least one letter/underscore, then
+					//any combination of letters, digits, and underscores)
+					else if(regex_match(token, regex("[a-zA-Z_][a-zA-Z_\\d]*"))) {
+						cout << "identifier";
+						typeFound=true;
 					}
 				}			
 			}
 			if(!typeFound) { cout << "not identifier"; }
 			cout << endl;
 		}
+		myTokens.clear();
 		cout << "Continue(y/n)?";
 		char c;
 		cin >> c;
