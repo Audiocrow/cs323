@@ -8,7 +8,7 @@ using namespace std;
 int main() {
 	ifstream ifile("./data.txt");
 	ofstream ofile("./newdata.txt");
-	regex token("(int|;|,|=|+|[a-zA-Z_]\\w+");
+	regex token("(int|;|,|=|\\+|[a-zA-Z_])\\w+");
 	string line, temp;
 	smatch match, tokMatch;
 	bool firstPrint=false, comment=false;
@@ -17,7 +17,7 @@ int main() {
 		cout <<"DEBUG: Read '" << line << "'" << endl;
 		while(regex_search(line, match, regex("(\\S+)(;)?"))) {
 			cout << "DEBUG: Matched '" << match.str(1) << "'";
-			if(match.size() > 2) cout << " and '" << match.str(2) << "'";
+			if(match.size() > 2) cout << " and '" << match.str(3) << "'";
 			cout << endl;
 			//Break up different tokens
 			firstPrint=false;
