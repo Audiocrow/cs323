@@ -8,46 +8,35 @@ using namespace std;
 int main() {
 	ifstream ifile("./data.txt");
 	ofstream ofile("./newdata.txt");
-	regex token("(//|int|;|,|=|\\+|\\d+(?:.\\d+)?|[a-zA-Z_]\\w*)");
-	string line, temp;
-	smatch match, tokMatch;
-	bool shouldSpace=false, comment=false, foundType=false;
+	regex token("(//|int|;|,|=|\\+|\\d+(?:.\\d+)?|[a-zA-Z_]+[\\w\\d<>]*)");
+	string line;
+	smatch match;
+	bool shouldSpace=false, foundType=false;
 	while(ifile.good()) {
 		getline(ifile, line);
-		cout <<"DEBUG: Read '" << line << "'" << endl;
-		while(regex_search(line, match, regex("(\\S+)"))) {
-			cout << "DEBUG: Matched '" << match.str(1) << "'" << endl;
-			//Break up different tokens
-			shouldSpace=false;
-			comment=false;
+		shouldSpace = false;
+		foundType = false;
+		//Find tokens
+		while(regex_search(line, match, token)) {
 			foundType = true;
-			temp = match.str(1);
-			while(regex_search(temp, tokMatch, token)) {
-				foundType = true;
-				cout << "\tDEBUG: Matched '" << tokMatch.str(1) << "'" << endl;
-				//Skip comments
-				if(tokMatch.str(1).length() > 1 && tokMatch.str(1).at(0) == '/' && tokMatch.str(1).at(1) == '/') {
-					comment=true;
-					break;
-				}
-				if(shouldSpace)
-					ofile << " ";
-				ofile << tokMatch.str(1);
-				if(tokMatch.str(1).compare(";") == 0) {
-					ofile << endl;
-					shouldSpace = false;
-				}
-				else shouldSpace = true;
-				temp = tokMatch.suffix().str();
-			}
-			if(comment)
+			//Skip comments
+			if(match.str(1).length() > 1 && match.str(1).at(0) == '/' && match.str(1).at(1) == '/')
 				break;
-			//Something not specified in tokens was found, so print it anyway
-			if(!foundType)
-				ofile << match.str(1);
+			//We print a space before the token if this token isn't the first on this line
+			if(shouldSpace)
+				ofile << " ";
+			ofile << match.str(1);
+			//If this token was a ; then print a newline
+			if(match.str(1).compare(";") == 0) {
+				ofile << endl;
+				shouldSpace = false; //Next token won't need a space affix
+			}
+			else shouldSpace = true;
 			line = match.suffix().str();
 		}
-		//ofile << endline;
+		//Something not specified in tokens was found, so print it anyway
+		if(!foundType)
+			ofile << match.str(1);
 		line.clear();
 	}
 	ofile.close();
