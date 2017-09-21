@@ -3,41 +3,52 @@
 #include <iostream>
 #include <regex>
 
-
 using namespace std;
 
 int main() {
-	ifstream ifile("data.txt");
-	ofstream ofile("newdata.txt");
-	regex identifier("([a-zA-Z_]\w*)");
-	regex symbol("(int|;|,|=|+)");
-	string line;
-	smatch match, idMatch, symMatch;
-	while(file.good()) {
+	ifstream ifile("./data.txt");
+	ofstream ofile("./newdata.txt");
+	regex token("(int|;|,|=|+|[a-zA-Z_]\\w+");
+	string line, temp;
+	smatch match, tokMatch;
+	bool firstPrint=false, comment=false;
+	while(ifile.good()) {
 		getline(ifile, line);
-		while(regex_search(line, match, regex("(\S+)(\s+|//)"))) {
-			//Skip comments
-			if(match.str(1).compare("//") == 0)
-				break;
-			//Break up the word we matched by separate tokens - identifiers, symbols, etc.
-			bool matched = false;
-			while(regex_search(match.str(1), idMatch, identifier)) {
-				ofile << idMatch.str(1);
-				matched = true;
+		cout <<"DEBUG: Read '" << line << "'" << endl;
+		while(regex_search(line, match, regex("(\\S+)(;)?"))) {
+			cout << "DEBUG: Matched '" << match.str(1) << "'";
+			if(match.size() > 2) cout << " and '" << match.str(2) << "'";
+			cout << endl;
+			//Break up different tokens
+			firstPrint=false;
+			comment=false;
+			temp = match.str(1);
+			while(regex_search(temp, tokMatch, token)) {
+				//Skip comments
+				if(tokMatch.str(1).length() > 1 && tokMatch.str(1).at(0) == '/' && tokMatch.str(1).at(1) == '/') {
+					comment=true;
+					break;
+				}
+				if(!firstPrint)
+					ofile << " ";
+				ofile << tokMatch.str(1);
+				firstPrint = true;
+				temp = tokMatch.suffix().str();
 			}
-			if(!matched)
-				ofile << match.str(1);
-			if(match.str(2).compare("\n") == 0 || match.str(2).compare("\r") == 0 || match.str(2).compare("\n\r") == 0 || match.str(2).compare("\r\n") == 0)
-				ofile << endl;
-			//Skip comments
-			else if(match.str(2).compare("//") == 0)
+			if(comment)
 				break;
-			else ofile << " ";
-			match = match.suffix().str();
+			//Something unknown was found, print it as its own token
+			if(!firstPrint)
+				ofile << match.str(1);
+			//Rather than a space, ; is followed by newline
+			if(match.size() > 2 && match.str(2).at(0) == ';')
+				ofile << endl;
+			line = match.suffix().str();
 		}
+		//ofile << endline;
 		line.clear();
 	}
-	ifile.close();
 	ofile.close();
+	ifile.close();
 	return 0;
 }
