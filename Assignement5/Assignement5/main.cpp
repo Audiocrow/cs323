@@ -9,7 +9,7 @@ using namespace std;
 
 
 int main() {
-	regex expr("(a*)(a|b)(c*)\\$");
+	regex expr("((W|w)=)?(a*)(a|b)(c*)\\$");
 	string token;
 	char repeat = 'y';
 	bool ever = true;
@@ -26,10 +26,10 @@ int main() {
 			cout << "Invalid expression please retype." << endl << endl;
 		}
 		else {
-			//Removes the 'W=' if placed before the language
-			if ((token.front() == 'W' || token.front() == 'w') && token[1] == '=') {
-				token.erase(0, 2);
-			}
+			////Removes the 'W=' if placed before the language
+			//if ((token.front() == 'W' || token.front() == 'w') && token[1] == '=') {
+			//	token.erase(0, 2);
+			//}
 			//compare statement on token
 			if (regex_match(token, expr))
 				cout << "token exists in language." << endl;
