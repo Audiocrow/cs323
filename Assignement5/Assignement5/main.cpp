@@ -17,14 +17,19 @@ int main() {
 	for (; ever;) {
 
 		//asks for user input of language to compare
-		cout << "Please give a language to compare (complete with '$') ";
+		cout << "Please give a word to compare with alphabet {a,b,c} (complete with '$') ";
 		cin >> token;
+		cin.ignore();
 
 		//checks for '$' ending statement in language
 		if (token.back() != '$') {
 			cout << "Invalid expression please retype." << endl << endl;
 		}
 		else {
+			//Removes the 'W=' if placed before the language
+			if ((token.front() == 'W' || token.front() == 'w') && token[1] == '=') {
+				token.erase(0, 2);
+			}
 			//compare statement on token
 			if (regex_match(token, expr))
 				cout << "token exists in language." << endl;
@@ -35,6 +40,7 @@ int main() {
 			do {
 				cout << "try again?(y/n) ";
 				cin >> repeat;
+				cin.ignore();
 				cout << endl;
 
 				repeat = tolower(repeat);
