@@ -7,14 +7,13 @@
 
 using namespace std;
 
-
 int main() {
 	regex expr("((W|w)=)?(a*)(a|b)(c*)\\$");
 	string token;
 	char repeat = 'y';
 	bool ever = true;
 
-	for (; ever;) {
+	for(;ever;) {
 
 		//asks for user input of language to compare
 		cout << "Please give a word to compare with alphabet {a,b,c} (complete with '$') ";
@@ -26,10 +25,6 @@ int main() {
 			cout << "Invalid expression please retype." << endl << endl;
 		}
 		else {
-			////Removes the 'W=' if placed before the language
-			//if ((token.front() == 'W' || token.front() == 'w') && token[1] == '=') {
-			//	token.erase(0, 2);
-			//}
 			//compare statement on token
 			if (regex_match(token, expr))
 				cout << "token exists in language." << endl;
