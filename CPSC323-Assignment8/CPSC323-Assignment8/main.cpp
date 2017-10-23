@@ -1,3 +1,4 @@
+#include <exception>
 #include <iostream>
 #include <map>
 #inclde <stack>
@@ -5,31 +6,39 @@
 
 using namespace std;
 
-//Pops the stack and returns what was popped
-template <typename T>
-T smartPop(stack<T>& myStack) {
-	T item = myStack.top();
-	myStack.pop();
-	return item;
-}
-
 //Returns "success" if the word could be traced
 //Otherwise returns the number of the failed spot on the table
-string traceWord(string word, string& parsingTable) {
+string traceWord(string word, string& parsingTable, map<char,int>& states, map<char,int>& terminals) {
+	int state;
 	stack<char> traceStack;
 	char top;
-	#define pop top=smartPop<char>(traceStack)
-	#define push(A) traceStack.push('A')
+	//Pop traceStack and return what was popped
+	char pop = [&]() {
+		char temp = traceStack.top();
+		traceStack.pop();
+		return temp;
+	};
+	//Push onto traceStack
+	void push = [&](char c) { traceStack.push(c); };
 	traceStack.push('$');
 	traceStack.push('E');
 	for(int i=0; i<word.length(); i++) {
-		pop;
-		switch(word[i]) {
-			case 'a':
-				for(int y=
-				break;
+		top=pop();
+		//Did we match a letter?
+		if(top == word[i]) {
+		}
+		else {
+			try {
+				string str = parsingTable[state][top];
+				for(string::reverse_iterator rit=str.rbegin(); rit!=str.rend(); ++rit)
+					push(*it);
+			}
+			//If this letter is not even in the language
+			catch(out_of_range e) {
+				return "invalid";
+			}
+		}
 	}
-	#undef pop
 }
 
 int main() {
