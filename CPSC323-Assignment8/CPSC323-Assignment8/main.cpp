@@ -31,7 +31,9 @@ bool traceWord(string word, string (&parsingTable)[rows][cols], char firstState,
 		return temp;
 	};
 	//Push onto traceStack
-	auto push = [&](char c) { traceStack.push(c); };
+	auto push = [&](char c) { 
+		traceStack.push(c); 
+	};
 	traceStack.push('$');
 	traceStack.push(firstState);
 	for(int i=0; i<word.length(); i++) {
@@ -93,5 +95,6 @@ int main() {
 	traceWord("a*(a/a)$", parsingTable, 'E', parseRow, parseCol);
 	cout << endl << "a(a+a)$" << endl;
 	traceWord("a(a+a)$", parsingTable, 'E', parseRow, parseCol);
+	system("Pause");
 	return 0;
 }
