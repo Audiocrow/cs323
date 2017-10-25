@@ -1,0 +1,10 @@
+﻿  main.cpp
+e:\github\cs323\cpsc323-assignment8\cpsc323-assignment8\main.cpp(39): warning C4018: '<': signed/unsigned mismatch
+  e:\github\cs323\cpsc323-assignment8\cpsc323-assignment8\main.cpp(93): note: see reference to function template instantiation 'bool traceWord<5,8>(std::string,std::string (&)[5][8],char,std::map<char,int,std::less<_Kty>,std::allocator<std::pair<const _Kty,_Ty>>> &,std::map<_Kty,_Ty,std::less<_Kty>,std::allocator<std::pair<const _Kty,_Ty>>> &)' being compiled
+          with
+          [
+              _Kty=char,
+              _Ty=int
+          ]
+  CPSC323-Assignment8.vcxproj -> E:\GitHub\cs323\CPSC323-Assignment8\Debug\CPSC323-Assignment8.exe
+  CPSC323-Assignment8.vcxproj -> E:\GitHub\cs323\CPSC323-Assignment8\Debug\CPSC323-Assignment8.pdb (Partial PDB)
