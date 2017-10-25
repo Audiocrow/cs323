@@ -1,3 +1,8 @@
+// Domingo, Daniel
+// Edgar, Alexander
+// Wulwick, Sean
+
+
 #include <algorithm>
 #include <iostream>
 #include <map>
@@ -31,9 +36,7 @@ bool traceWord(string word, string(&parsingTable)[rows][cols], char firstState, 
 		return temp;
 	};
 	//Push onto traceStack
-	auto push = [&](char c) {
-		traceStack.push(c);
-	};
+	auto push = [&](char c) { traceStack.push(c); };
 	traceStack.push('$');
 	traceStack.push(firstState);
 	for (int i = 0; i<word.length(); i++) {
@@ -79,22 +82,22 @@ bool traceWord(string word, string(&parsingTable)[rows][cols], char firstState, 
 }
 
 int main() {
-	cout << "Problem 1" << endl << "----------" << endl;
-	string parsingTable[5][8] = {
-		{ "TQ", "", "", "", "", "TQ", "", "" },
-		{ "", "+TQ", "-TQ", "", "", "", "\n", "\n" }, //Using '\n' = lambda
-		{ "FR", "", "", "", "", "FR", "", "" },
-		{ "", "\n", "\n", "*FR", "/FR", "", "\n", "\n" },
-		{ "a", "", "", "", "", "(E)", "", "" },
+	cout << "Problem 2" << endl << "----------" << endl;
+	string parsingTable[6][10] = {
+		{"a=E",  ""  ,  ""  ,  ""  ,  ""  ,  "" ,  "" , ""  , ""  , ""  },
+		{ "TQ", "TQ" ,   "" ,  ""  ,  ""  ,  "" , "TQ", ""  , ""  , ""  },
+		{ ""  , "+TQ", "-TQ",  ""  ,  ""  ,  "" , ""  , "\n", ""  ,"\n" }, //Using '\n' = lambda
+		{ "FR", "FR" ,  ""  ,  ""  ,  ""  , ""  , "FR", ""  , ""  , ""  },
+		{ ""  ,  ""  , "\n" , "\n" , "*FR","/FR",  "" , "\n", ""  ,"\n" },
+		{ "a" ,  "b" ,  ""  ,  ""  ,  ""  , ""  ,"(E)",  "" , ""  , ""  },
 	};
-	map<char, int> parseRow = { { 'E',0 },{ 'Q',1 },{ 'T',2 },{ 'R',3 },{ 'F',4 } };
-	map<char, int> parseCol = { { 'a',0 },{ '+',1 },{ '-',2 },{ '*',3 },{ '/',4 },{ '(',5 },{ ')',6 },{ '$',7 } };
-	cout << "(a+a)*a$" << endl;
-	traceWord("(a+a)*a$", parsingTable, 'E', parseRow, parseCol);
-	cout << endl << "a*(a/a)$" << endl;
-	traceWord("a*(a/a)$", parsingTable, 'E', parseRow, parseCol);
-	cout << endl << "a(a+a)$" << endl;
-	traceWord("a(a+a)$", parsingTable, 'E', parseRow, parseCol);
-	system("Pause");
+	map<char, int> parseRow = { {'S',0},{ 'E',1 },{ 'Q',2 },{ 'T',3 },{ 'R',4 },{ 'F',5 } };
+	map<char, int> parseCol = { { 'a',0 },{ 'b',1 },{ '+',2 },{ '-',3 },{ '*',4 },{ '/',5 },{ '(',6 },{ ')',7 },{ '=',8 },{ '$',9 } };
+	cout << "a=(a+a)*b$" << endl;
+	traceWord("a=(a+a)*b$", parsingTable, 'S', parseRow, parseCol);
+	cout << endl << "a=a*(b-a)$" << endl;
+	traceWord("a=a*(b-a)$", parsingTable, 'S', parseRow, parseCol);
+	cout << endl << "a=(a+a)b$" << endl;
+	traceWord("a=(a+a)b$", parsingTable, 'S', parseRow, parseCol);
 	return 0;
 }
