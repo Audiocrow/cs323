@@ -18,6 +18,12 @@ int main() {
 		{5,3},{6,1},{7,3},{8,1}
 	};
 
+	map<int, char> NON_STATE_REVERSE{
+		{ 16, 'a' },{ 17, '+' },{ 18, '-' },{ 19, '*' },{ 20, '/' },
+		{ 21, '(' },{ 22, ')' },{ 23, '$' },{ 24, 'E' },{ 25, 'T' },
+		{ 26, 'F' }
+	};
+
 	string word = "(a+a)/a$";
 
 	string table[16][11] = {
@@ -40,7 +46,7 @@ int main() {
 	};
 
 	cout << word << endl;
-	traceWord(word, table, NON_STATES, LEFT_HAND_RULE, RIGHT_HAND_RULE);
+	traceWord(word, table, NON_STATES, LEFT_HAND_RULE, RIGHT_HAND_RULE, NON_STATE_REVERSE);
 	system("Pause");
 
 	return 0;

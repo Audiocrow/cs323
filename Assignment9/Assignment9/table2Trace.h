@@ -7,23 +7,26 @@
 
 using namespace std;
 
-void printStack(stack<int>& myStack) {
+void printStack(stack<int>& myStack, map<int, char>& myMap) {
 	stack<int> copy(myStack);
 	vector<int> a;
 	vector<int>::iterator it;
 	while (!copy.empty()) {
-		a.insert(a.end(), copy.top());
+		a.insert(a.begin(), copy.top());
 		copy.pop();
 	}
 	cout << "stack reads: ";
 	for (it = a.begin(); it < a.end(); it++) {
-		cout << ' ' << *it;
+		if (*it > 15) 
+			cout << ' ' << myMap.at(*it);
+		else
+			cout << ' ' << *it;
 	}
 	cout << endl;
 }
 
 template<size_t rows, size_t cols>
-bool traceWord(string word, string(&parsingTable)[rows][cols], map<char, int>& NON_STATES, map<int, char>& LEFT_RULE, map<int, int>& RIGHT_RULE) {
+bool traceWord(string word, string(&parsingTable)[rows][cols], map<char, int>& NON_STATES, map<int, char>& LEFT_RULE, map<int, int>& RIGHT_RULE, map<int, char>& NON_STATES_REVERSE) {
 	regex REDUCE("^R\\d{1,2}");
 	regex SHIFT("^S\\d{1,2}");
 	regex DIGITS("^\\d{1,2}");
@@ -86,7 +89,7 @@ bool traceWord(string word, string(&parsingTable)[rows][cols], map<char, int>& N
 			push(_row);
 			push(_tempCol);
 			push(_pushItRealGood);
-			printStack(traceStack);
+			printStack(traceStack, NON_STATES_REVERSE);
 		}
 		else if (regex_match(_dopeMemes, SHIFT)) {
 			_dopeMemes = _dopeMemes.substr(1, _dopeMemes.size());
@@ -95,14 +98,14 @@ bool traceWord(string word, string(&parsingTable)[rows][cols], map<char, int>& N
 			push(_row);
 			push(_col);
 			push(_pushItRealGood);
-			printStack(traceStack);
+			printStack(traceStack, NON_STATES_REVERSE);
 		}
 		else if (regex_match(_dopeMemes, DIGITS)) {
 			_pushItRealGood = stoi(_dopeMemes);
 			push(_row);
 			push(_col);
 			push(_pushItRealGood);
-			printStack(traceStack);
+			printStack(traceStack, NON_STATES_REVERSE);
 		}
 		else if (regex_match(_dopeMemes, ACCEPT)) {
 			cout << word << " is accepted by the language." << endl;
