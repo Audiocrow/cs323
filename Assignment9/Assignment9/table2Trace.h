@@ -6,8 +6,14 @@
 
 using namespace std;
 
-string printStack(stack<char>& myStack) {
-	stack<char> copy(myStack);
+map<char, int> NON_STATES{
+	{'a', 16},	{'+', 17},	{'-', 18},	{'*', 19},	{'/', 20}, 
+	{'(', 21},	{')', 22},	{'$', 23},	{'E', 24 },	{'T', 25 },
+	{'F', 26 }
+};
+
+string printStack(stack<int>& myStack) {
+	stack<int> copy(myStack);
 	string result;
 	while (!copy.empty()) {
 		result += copy.top();
@@ -17,10 +23,3 @@ string printStack(stack<char>& myStack) {
 	return result;
 }
 
-class table2 {
-
-public:
-	template <size_t rows, size_t cols>
-	bool traceWord(string word, string(&parsingTable)[rows][cols], char firstState, int& states, );
-
-};
