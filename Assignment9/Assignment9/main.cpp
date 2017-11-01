@@ -1,10 +1,22 @@
 #include "table2Trace.h"
-#include <regex>
 
 int main() {
 
-	regex SHIFT_REDUCE("(S|R)\\d{1-2}");
-	regex ACCEPT("ACC");
+	map<char, int> NON_STATES{
+		{ 'a', 16 },{ '+', 17 },{ '-', 18 },{ '*', 19 },{ '/', 20 },
+		{ '(', 21 },{ ')', 22 },{ '$', 23 },{ 'E', 24 },{ 'T', 25 },
+		{ 'F', 26 }
+	};
+
+	map<int, char> LEFT_HAND_RULE{
+		{1,'E'},{2,'E'},{3,'E'},{4,'T'},
+		{5,'T'},{6,'F'},{7,'F'},{8,'F'}
+	};
+
+	map<int, int> RIGHT_HAND_RULE{
+		{1,3},{2,3},{3,1},{4,3},
+		{5,3},{6,1},{7,3},{8,1}
+	};
 
 	string table[16][11] = {
 		{ "S5" ,  ""  ,  ""  ,  ""  ,  ""  , "S4" ,  ""  ,  ""  , "1" , "2" , "3" },
