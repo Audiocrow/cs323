@@ -11,17 +11,21 @@ void printStack(stack<int>& myStack, map<int, char>& myMap) {
 	stack<int> copy(myStack);
 	vector<int> a;
 	vector<int>::iterator it;
-	while (!copy.empty()) {
-		a.insert(a.begin(), copy.top());
-		copy.pop();
+	if (!copy.empty()) {
+		while (!copy.empty()) {
+			a.insert(a.begin(), copy.top());
+			copy.pop();
+		}
+		cout << "stack reads: ";
+		for (it = a.begin(); it < a.end(); it++) {
+			if (*it > 15)
+				cout << ' ' << myMap.at(*it);
+			else
+				cout << ' ' << *it;
+		}
 	}
-	cout << "stack reads: ";
-	for (it = a.begin(); it < a.end(); it++) {
-		if (*it > 15) 
-			cout << ' ' << myMap.at(*it);
-		else
-			cout << ' ' << *it;
-	}
+	else
+		cout << "stack reads: empty";
 	cout << endl;
 }
 
@@ -110,11 +114,17 @@ bool traceWord(string word, string(&parsingTable)[rows][cols], map<char, int>& N
 		else if (regex_match(_dopeMemes, ACCEPT)) {
 			cout << word << " is accepted by the language." << endl;
 			RUN = false;
+			while (!traceStack.empty())
+				_popDump = pop();
+			printStack(traceStack, NON_STATES_REVERSE);
 			return true;
 		}
 		else {
-			cout << "you done fucked up son." << endl;
+			cout << word << " is not accepted by the language." << endl;
 			RUN = false;
+			while (!traceStack.empty())
+				_popDump = pop();
+			printStack(traceStack, NON_STATES_REVERSE);
 		}
 	}
 	return false;
