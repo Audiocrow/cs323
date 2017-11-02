@@ -47,15 +47,11 @@ bool traceWord(string word, string(&parsingTable)[rows][cols], map<char, int>& N
 	int _rightRule;
 	int _popDump;
 
-	smatch _sm;
-
 	char _leftRule;
-	char _wordChar = word.at(_stringIndex);
+	char _wordChar;
 	string _dopeMemes;
 	
 	stack<int> traceStack;
-	
-	//map<char, int>::iterator mapIt;
 	
 	auto pop = [&]() {
 		int temp = traceStack.top();
@@ -68,12 +64,21 @@ bool traceWord(string word, string(&parsingTable)[rows][cols], map<char, int>& N
 	};
 	
 	traceStack.push(0);
+	_wordChar = word.at(_stringIndex);
+
+
 	
 	while(RUN) {
 
 		_row = pop();
 		if (_row > 15)
 			break;
+
+		if (NON_STATES.find(_wordChar) == NON_STATES.end())
+		{
+			cout << "Character '" << _wordChar << "' not in the language." << endl;
+			break;
+		}
 		_col = NON_STATES.at(_wordChar);
 
 		_dopeMemes = parsingTable[_row][_col - 16];
@@ -98,6 +103,11 @@ bool traceWord(string word, string(&parsingTable)[rows][cols], map<char, int>& N
 		else if (regex_match(_dopeMemes, SHIFT)) {
 			_dopeMemes = _dopeMemes.substr(1, _dopeMemes.size());
 			_wordChar = word.at(++_stringIndex);
+			if (NON_STATES.find(_wordChar) == NON_STATES.end()) {
+				cout << "Character '" << _wordChar << "' not in the language." << endl;
+				RUN = false;
+				break;
+			}
 			_pushItRealGood = stoi(_dopeMemes);
 			push(_row);
 			push(_col);
@@ -122,10 +132,9 @@ bool traceWord(string word, string(&parsingTable)[rows][cols], map<char, int>& N
 		else {
 			cout << word << " is not accepted by the language." << endl;
 			RUN = false;
-			while (!traceStack.empty())
-				_popDump = pop();
-			printStack(traceStack, NON_STATES_REVERSE);
 		}
 	}
+	while (!traceStack.empty())
+		_popDump = pop();
 	return false;
 }

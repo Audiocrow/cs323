@@ -24,7 +24,13 @@ int main() {
 		{ 26, 'F' }
 	};
 
-	string word = "(a+a)/a$";
+	string word1 = "(a+a)/a$";
+	string word2 = "a(a+a)$";
+	string word3 = "a/a+(a*a)$";
+	string word4 = "a*a*(+a)$";
+	string word5 = "z/a*(a+a)$";
+	string word6 = "a\\a*(a+a)$";
+	string word7 = "a/a*(z+a)$";
 
 	string table[16][11] = {
 		{ "S5" ,  ""  ,  ""  ,  ""  ,  ""  , "S4" ,  ""  ,  ""  , "1" , "2" , "3" },
@@ -45,8 +51,33 @@ int main() {
 		{  ""  , "R7" , "R7" , "R7" , "R7" ,  ""  , "R7" , "R7" ,  ""  , "" ,  "" }
 	};
 
-	cout << word << endl;
-	traceWord(word, table, NON_STATES, LEFT_HAND_RULE, RIGHT_HAND_RULE, NON_STATE_REVERSE);
+	cout << word1 << endl;
+	traceWord(word1, table, NON_STATES, LEFT_HAND_RULE, RIGHT_HAND_RULE, NON_STATE_REVERSE);
+	cout << endl;
+
+	cout << word2 << endl;
+	traceWord(word2, table, NON_STATES, LEFT_HAND_RULE, RIGHT_HAND_RULE, NON_STATE_REVERSE);
+	cout << endl;
+
+	cout << word3 << endl;
+	traceWord(word3, table, NON_STATES, LEFT_HAND_RULE, RIGHT_HAND_RULE, NON_STATE_REVERSE);
+	cout << endl;
+
+	cout << word4 << endl;
+	traceWord(word4, table, NON_STATES, LEFT_HAND_RULE, RIGHT_HAND_RULE, NON_STATE_REVERSE);
+	cout << endl;
+
+	cout << word5 << endl;
+	traceWord(word5, table, NON_STATES, LEFT_HAND_RULE, RIGHT_HAND_RULE, NON_STATE_REVERSE);
+	cout << endl;
+
+	cout << word6 << endl;
+	traceWord(word6, table, NON_STATES, LEFT_HAND_RULE, RIGHT_HAND_RULE, NON_STATE_REVERSE);
+	cout << endl;
+
+	cout << word7 << endl;
+	traceWord(word7, table, NON_STATES, LEFT_HAND_RULE, RIGHT_HAND_RULE, NON_STATE_REVERSE);
+	cout << endl;
 	system("Pause");
 
 	return 0;
