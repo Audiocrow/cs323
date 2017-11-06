@@ -40,14 +40,14 @@ bool traceWord(string word, string(&parsingTable)[rows][cols], map<char, int>& N
 	int _row;
 	int _col;
 	int _tempCol;
-	int _pushItRealGood;
+	int _pushFinal;
 	int _ruleNumber;
 	int _rightRule;
 	int _popDump;
 
 	char _leftRule;
 	char _wordChar;
-	string _dopeMemes;
+	string _tableString;
 	
 	stack<int> traceStack;
 	
@@ -79,40 +79,38 @@ bool traceWord(string word, string(&parsingTable)[rows][cols], map<char, int>& N
 		}
 		_col = NON_STATES.at(_wordChar);
 
-		_dopeMemes = parsingTable[_row][_col - 16];
+		_tableString = parsingTable[_row][_col - 16];
 
-		if (regex_match(_dopeMemes, REDUCE)) {
-			push(_row);
-			_dopeMemes = _dopeMemes.substr(1, _dopeMemes.size());
-			_ruleNumber = stoi(_dopeMemes);
+		if (regex_match(_tableString, REDUCE)) {
+			_ruleNumber = stoi(_tableString.substr(1, _tableString.size()));
 			_leftRule = LEFT_RULE.at(_ruleNumber);
 			_tempCol = NON_STATES.at(_leftRule);
 			_rightRule = RIGHT_RULE.at(_ruleNumber);
-			for (int i = 0; i <(2 * _rightRule); i++)
+			for (int i = 0; i <(2 * _rightRule)-1; i++)
 				_popDump = pop();
 			_row = pop();
-			_dopeMemes = parsingTable[_row][_tempCol - 16];
-			_pushItRealGood = stoi(_dopeMemes);
+			_tableString = parsingTable[_row][_tempCol - 16];
+			_pushFinal = stoi(_tableString);
 			push(_row);
 			push(_tempCol);
-			push(_pushItRealGood);
+			push(_pushFinal);
 			printStack(traceStack, NON_STATES_REVERSE);
 		}
-		else if (regex_match(_dopeMemes, SHIFT)) {
-			_dopeMemes = _dopeMemes.substr(1, _dopeMemes.size());
+		else if (regex_match(_tableString, SHIFT)) {
+			_tableString = _tableString.substr(1, _tableString.size());
 			_wordChar = word.at(++_stringIndex);
 			if (NON_STATES.find(_wordChar) == NON_STATES.end()) {
 				cout << "Character '" << _wordChar << "' not in the language." << endl;
 				RUN = false;
 				break;
 			}
-			_pushItRealGood = stoi(_dopeMemes);
+			_pushFinal = stoi(_tableString);
 			push(_row);
 			push(_col);
-			push(_pushItRealGood);
+			push(_pushFinal);
 			printStack(traceStack, NON_STATES_REVERSE);
 		}
-		else if (regex_match(_dopeMemes, ACCEPT)) {
+		else if (regex_match(_tableString, ACCEPT)) {
 			cout << word << " is accepted by the language." << endl;
 			RUN = false;
 			while (!traceStack.empty())
