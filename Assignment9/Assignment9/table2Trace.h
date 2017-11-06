@@ -1,5 +1,4 @@
 #include <iostream>
-#include <algorithm>
 #include <string>
 #include <map>
 #include <stack>
@@ -33,7 +32,6 @@ template<size_t rows, size_t cols>
 bool traceWord(string word, string(&parsingTable)[rows][cols], map<char, int>& NON_STATES, map<int, char>& LEFT_RULE, map<int, int>& RIGHT_RULE, map<int, char>& NON_STATES_REVERSE) {
 	regex REDUCE("^R\\d{1,2}");
 	regex SHIFT("^S\\d{1,2}");
-	regex DIGITS("^\\d{1,2}");
 	regex ACCEPT("ACC");
 	
 	bool RUN = true;
@@ -114,19 +112,11 @@ bool traceWord(string word, string(&parsingTable)[rows][cols], map<char, int>& N
 			push(_pushItRealGood);
 			printStack(traceStack, NON_STATES_REVERSE);
 		}
-		else if (regex_match(_dopeMemes, DIGITS)) {
-			_pushItRealGood = stoi(_dopeMemes);
-			push(_row);
-			push(_col);
-			push(_pushItRealGood);
-			printStack(traceStack, NON_STATES_REVERSE);
-		}
 		else if (regex_match(_dopeMemes, ACCEPT)) {
 			cout << word << " is accepted by the language." << endl;
 			RUN = false;
 			while (!traceStack.empty())
 				_popDump = pop();
-			printStack(traceStack, NON_STATES_REVERSE);
 			return true;
 		}
 		else {
