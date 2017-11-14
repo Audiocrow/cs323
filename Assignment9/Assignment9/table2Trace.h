@@ -1,9 +1,3 @@
-#include <iostream>
-#include <string>
-#include <map>
-#include <stack>
-#include <regex>
-
 using namespace std;
 
 void printStack(stack<int>& myStack, map<int, char>& myMap) {
@@ -29,7 +23,7 @@ void printStack(stack<int>& myStack, map<int, char>& myMap) {
 }
 
 template<size_t rows, size_t cols>
-bool traceWord(string word, string(&parsingTable)[rows][cols], map<char, int>& NON_STATES, map<int, char>& LEFT_RULE, map<int, int>& RIGHT_RULE, map<int, char>& NON_STATES_REVERSE) {
+bool traceWord(string word, string(&parsingTable)[rows][cols], map<char, int>& NON_STATES, map<int, pair<char,int>>& RULES, map<int, char>& NON_STATES_REVERSE) {
 	regex REDUCE("^R\\d{1,2}");
 	regex SHIFT("^S\\d{1,2}");
 	regex ACCEPT("ACC");
@@ -83,9 +77,9 @@ bool traceWord(string word, string(&parsingTable)[rows][cols], map<char, int>& N
 
 		if (regex_match(_tableString, REDUCE)) {
 			_ruleNumber = stoi(_tableString.substr(1, _tableString.size()));
-			_leftRule = LEFT_RULE.at(_ruleNumber);
+			_leftRule = RULES.at(_ruleNumber).first;
 			_tempCol = NON_STATES.at(_leftRule);
-			_rightRule = RIGHT_RULE.at(_ruleNumber);
+			_rightRule = RULES.at(_ruleNumber).second;
 			for (int i = 0; i <(2 * _rightRule)-1; i++)
 				_popDump = pop();
 			_row = pop();
