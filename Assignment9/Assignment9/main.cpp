@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include <map>
+#include <unordered_map>
 #include <stack>
 #include <utility>
 #include <regex>
@@ -11,20 +11,20 @@ using namespace std;
 
 int main() {
 
-	map<char, int> NON_STATES{
+	unordered_map<char, int> NON_STATES{
 		{ 'a', 16 },{ '+', 17 },{ '-', 18 },{ '*', 19 },{ '/', 20 },
 		{ '(', 21 },{ ')', 22 },{ '$', 23 },{ 'E', 24 },{ 'T', 25 },
 		{ 'F', 26 }
 	};
 
-	map<int, pair<char,int>> RULES{
+	unordered_map<int, pair<char,int>> RULES{
 		{1,{'E',3}},{2,{'E',3}},{3,{'E',1}},{4,{'T',3}},
 		{5,{'T',3}},{6,{'T',1}},{7,{'F',3}},{8,{'F',1}}
 	};
 
 
 	//this map will not be needed for the final project
-	map<int, char> NON_STATE_REVERSE{
+	unordered_map<int, char> NON_STATE_REVERSE{
 		{ 16, 'a' },{ 17, '+' },{ 18, '-' },{ 19, '*' },{ 20, '/' },
 		{ 21, '(' },{ 22, ')' },{ 23, '$' },{ 24, 'E' },{ 25, 'T' },
 		{ 26, 'F' }

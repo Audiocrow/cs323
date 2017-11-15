@@ -1,6 +1,6 @@
 using namespace std;
 
-void printStack(stack<int>& myStack, map<int, char>& myMap) {
+void printStack(stack<int>& myStack, unordered_map<int, char>& myMap) {
 	stack<int> copy(myStack);
 	vector<int> a;
 	vector<int>::iterator it;
@@ -23,7 +23,7 @@ void printStack(stack<int>& myStack, map<int, char>& myMap) {
 }
 
 template<size_t rows, size_t cols>
-bool traceWord(string word, string(&parsingTable)[rows][cols], map<char, int>& NON_STATES, map<int, pair<char,int>>& RULES, map<int, char>& NON_STATES_REVERSE) {
+bool traceWord(string word, string(&parsingTable)[rows][cols], unordered_map<char, int>& NON_STATES, unordered_map<int, pair<char,int>>& RULES, unordered_map<int, char>& NON_STATES_REVERSE) {
 	regex REDUCE("^R\\d{1,2}");
 	regex SHIFT("^S\\d{1,2}");
 	regex ACCEPT("ACC");
