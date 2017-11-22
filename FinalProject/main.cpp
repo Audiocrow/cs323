@@ -25,4 +25,31 @@ int main() {
 	ofstream ofile("./finalv2.txt");
 	ofile << v1_data;
 	ofile.close();
+	ofile = ofstream("./final_translated.cpp");
+	if(v1_data.find("print") != string::npos) {
+		cout << "#include <iostream>" << endl << "using namespace std;" << endl;
+		ofile << "#include <iostream>" << endl << "using namespace std;" << endl;
+	}
+	//Change var declaration to C++ int declaration
+	v1_data = regex_replace(v1_data, regex("var(?:\\r\\n|\\r|\\n)?([^:]+): integer ;"), "int $1;");
+	//Add int main to the start and end of the program
+	v1_data = regex_replace(v1_data, regex("program[^;]*;([^]+)end."), "int main() {$1return 0;\n}"); //[^] is sort of a C++ regex hack to have a . which also matches newline
+	//Remove the "begin" line which is awkwardly after the variable declaration of the non-C++ code
+	v1_data = regex_replace(v1_data, regex("begin(?:\\r\\n|\\r|\\n)"), "");
+	//Change the prints to couts
+	v1_data = regex_replace(v1_data, regex("print \\( ([^)]+) \\) ;"), "cout<<$1<<endl;");
+	//Tab blocks correctly
+	size_t pos = v1_data.find("{");
+	string::iterator it = v1_data.begin()+pos;
+	while(it != v1_data.end()) {
+		if(*it == '}')
+			break;
+		if(it > v1_data.begin() && *(it-1) == '\n')
+			v1_data.insert(it, '\t');
+		++it;
+	}
+	cout << v1_data;
+	cout << endl << "//The above translation has been printed to final_translated.cpp" << endl;
+	ofile << v1_data;
+	ofile.close();
 }
