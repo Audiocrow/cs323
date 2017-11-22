@@ -38,15 +38,21 @@ int main() {
 	v1_data = regex_replace(v1_data, regex("begin(?:\\r\\n|\\r|\\n)"), "");
 	//Change the prints to couts
 	v1_data = regex_replace(v1_data, regex("print \\( ([^)]+) \\) ;"), "cout<<$1<<endl;");
-	//Tab blocks correctly
+	//Tab code blocks correctly
 	size_t pos = v1_data.find("{");
-	string::iterator it = v1_data.begin()+pos;
-	while(it != v1_data.end()) {
-		if(*it == '}')
-			break;
-		if(it > v1_data.begin() && *(it-1) == '\n')
-			v1_data.insert(it, '\t');
-		++it;
+	if(pos != string::npos) {
+		string::iterator it = v1_data.begin()+pos+1;
+		int numNested = 1;
+		for(it; it!=v1_data.end(); ++it) {
+			if(*it == '{')
+				numNested++;
+			else if(*it == '}')
+				numNested--;
+			else if(it>v1_data.begin() && (*(it-1) == '\n' || *(it-1) == '\r')) {
+				for(int i=0; i<numNested; i++)
+					it = v1_data.insert(it, '\t');
+			}
+		}
 	}
 	cout << v1_data;
 	cout << endl << "//The above translation has been printed to final_translated.cpp" << endl;
