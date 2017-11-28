@@ -101,7 +101,7 @@ bool traceWord(string word, string(&parsingTable)[rows][cols], unordered_map<cha
 			_pushFinal = stoi(_tableString);
 			push(_row);
 			push(_col);
-			push(_pushFinal);
+			push(stoi(_tableString));
 			printStack(traceStack, NON_STATES_REVERSE);
 		}
 		else if (regex_match(_tableString, ACCEPT)) {

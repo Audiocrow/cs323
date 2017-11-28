@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <stack>
 #include <utility>
+#include <algorithm>
 
 using namespace std;
 
