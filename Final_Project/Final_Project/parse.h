@@ -1,7 +1,7 @@
 #define OFFSET 69
 
 template<size_t rows, size_t cols>
-bool SubString(stack<int>& myStack,
+bool WordParse(stack<int>& myStack,
 	string(&parsingTable)[rows][cols],
 	string word,
 	unordered_map<string, int>& WORD_STRING,
@@ -9,7 +9,15 @@ bool SubString(stack<int>& myStack,
 	unordered_map<int, string>& ERRORS,
 	unordered_map<int, pair<string, int>>& RULES);
 
-bool parseFullString(string word)
+void nextWord(string &Language, string &nextWord)
+{
+	
+	size_t pos = Language.find(" ");
+	nextWord = Language.substr(0, pos);
+	Language = Language.substr(pos + 1);
+}
+
+bool LanguageParse(string Language)
 {
 	
 	string parsingTable[69][48]{
@@ -83,7 +91,6 @@ bool parseFullString(string word)
 		{ "","","","","","","","R27","R27","R27","R27","","","","","","","","","","","","","","","","","R27","","R27","","","","","","","","","","","","","","","","","","" },
 		{ "","","","","","","","R28","R28","R28","R28","","","","","","","","","","","","","","","","","R28","","R28","","","","","","","","","","","","","","","","","" }
 	};
-	
 	
 	unordered_map<string, int> WORD_STRINGS{
 		{"program"		,69	},{	"var"		,70	},{	"begin"		,71	},{	"end."		,72	},{"integer",73	},{	"print"		,74	},
@@ -161,14 +168,12 @@ bool parseFullString(string word)
 		traceStack.push(x);
 	};
 
-	replace(word.begin(), word.end(), '\n', ' ');
-
+	replace(Language.begin(), Language.end(), '\n', ' ');
+	
+	nextWord(Language, currentWord);
 	traceStack.push(0);
 
 	for (;ever;) {
-		pos = word.find(" ");
-		currentWord = word.substr(0, pos);
-		word = word.substr(pos + 1);
 		
 		row = pop();
 		if (row > OFFSET - 1)
@@ -178,7 +183,7 @@ bool parseFullString(string word)
 
 		if (WORD_STRINGS.find(currentWord) == WORD_STRINGS.end())
 		{
-			if (!SubString(traceStack, parsingTable, currentWord, WORD_STRINGS, WORD_CHARS, ERRORS, RULES)) 
+			if (!WordParse(traceStack, parsingTable, currentWord, WORD_STRINGS, WORD_CHARS, ERRORS, RULES)) 
 			{
 				cout << "unknown identifier" << endl;
 				break;
@@ -208,6 +213,7 @@ bool parseFullString(string word)
 			push(row);
 			push(col);
 			push(stoi(tableString));
+			nextWord(Language, currentWord);
 		}
 		else if (regex_match(tableString, ACCEPT) && program && var && begin && end) {
 			while (!traceStack.empty())
@@ -226,20 +232,30 @@ bool parseFullString(string word)
 		}
 	}
 	while (!traceStack.empty())
+	{
 		traceStack.pop();
-	if (!program) 
+	}
+	if (!program)
+	{
 		cout << "'program' is expected" << endl;
+	}
 	if (!var)
+	{
 		cout << "'var' is expected" << endl;
+	}
 	if (!begin)
+	{
 		cout << "'begin' is expected" << endl;
+	}
 	if (!end)
+	{
 		cout << "'end.' is expected" << endl;
+	}
 	return false;
 }
 
 template<size_t rows, size_t cols>
-bool SubString(stack<int>& myStack, 
+bool WordParse(stack<int>& myStack, 
 					string (&parsingTable)[rows][cols], 
 					string word,
 					unordered_map<string, int>& WORD_STRING,

@@ -20,7 +20,7 @@ int main() {
 	
 	string v2_data = fileClean(v1_data);
 
-	if (parseFullString(v2_data))
+	if (LanguageParse(v2_data))
 	{
 		conversion(v2_data);
 	}
