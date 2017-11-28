@@ -1,0 +1,11 @@
+program p2017 ;
+var
+p1 , q2r , r , p12 : integer ;
+begin
+p1 = 3 ;
+q2r = 4 ;
+r = 5 ;
+print ( r ) ;
+p12 = p1 * ( q2r + 2 * r ) ;
+print ( p12 ) ;
+end.
