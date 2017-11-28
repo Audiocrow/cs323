@@ -171,7 +171,7 @@ bool LanguageParse(string Language)
 	replace(Language.begin(), Language.end(), '\n', ' ');
 	
 	nextWord(Language, currentWord);
-	traceStack.push(0);
+	push(0);
 
 	for (;ever;) {
 		

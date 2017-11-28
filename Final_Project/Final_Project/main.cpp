@@ -24,7 +24,6 @@ int main() {
 	{
 		conversion(v2_data);
 	}
-
 	
 	system("pause");
 	return 0;

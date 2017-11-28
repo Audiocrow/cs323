@@ -8,7 +8,7 @@ void conversion(string data) {
 	data = regex_replace(data, regex("var(?:\\r\\n|\\r|\\n)?([^:]+): integer ;"), "int $1;");
 	//Add int main to the start and end of the program
 	data = regex_replace(data, regex("program[^;]*;([^]+)end."), "int main() {$1return 0;\n}"); //[^] is sort of a C++ regex hack to have a . which also matches newline
-																									  //Remove the "begin" line which is awkwardly after the variable declaration of the non-C++ code
+	//Remove the "begin" line which is awkwardly after the variable declaration of the non-C++ code
 	data = regex_replace(data, regex("begin(?:\\r\\n|\\r|\\n)"), "");
 	//Change the prints to couts
 	data = regex_replace(data, regex("print \\( ([^)]+) \\) ;"), "cout<<$1<<endl;");
