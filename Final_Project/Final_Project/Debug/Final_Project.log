@@ -1,11 +1,1 @@
-﻿  main.cpp
-e:\github\cs323\final_project\final_project\parse.h(138): warning C4101: 'currentWordChar': unreferenced local variable
-e:\github\cs323\final_project\final_project\parse.h(314): warning C4018: '<': signed/unsigned mismatch
-  e:\github\cs323\final_project\final_project\parse.h(181): note: see reference to function template instantiation 'bool SubString<69,48>(std::stack<int,std::deque<_Ty,std::allocator<_Ty>>> &,std::string (&)[69][48],std::string,std::unordered_map<std::string,_Ty,std::hash<_Kty>,std::equal_to<_Kty>,std::allocator<std::pair<const _Kty,_Ty>>> &,std::unordered_map<char,_Ty,std::hash<char>,std::equal_to<char>,std::allocator<std::pair<const char,_Ty>>> &,std::unordered_map<int,std::string,std::hash<int>,std::equal_to<_Ty>,std::allocator<std::pair<const int,std::basic_string<char,std::char_traits<char>,std::allocator<char>>>>> &,std::unordered_map<int,std::pair<std::string,int>,std::hash<int>,std::equal_to<_Ty>,std::allocator<std::pair<const int,std::pair<std::string,int>>>> &)' being compiled
-          with
-          [
-              _Ty=int,
-              _Kty=std::string
-          ]
-  Final_Project.vcxproj -> E:\GitHub\cs323\Final_Project\Debug\Final_Project.exe
-  Final_Project.vcxproj -> E:\GitHub\cs323\Final_Project\Debug\Final_Project.pdb (Partial PDB)
+﻿

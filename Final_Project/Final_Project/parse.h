@@ -1,13 +1,13 @@
-#define OFFSET 69
+#define OFFSET			69
+#define SHIFT_SUCCEED	0
+#define REDUCE_SUCCEED	1
+#define ACCEPT_FINAL	2
+#define FAIL			-1
 
 template<size_t rows, size_t cols>
-bool WordParse(stack<int>& myStack,
-	string(&parsingTable)[rows][cols],
-	string word,
-	unordered_map<string, int>& WORD_STRING,
-	unordered_map<char, int>& WORD_CHAR,
-	unordered_map<int, string>& ERRORS,
-	unordered_map<int, pair<string, int>>& RULES);
+bool WordParse(bool charByChar, string currentWord, stack<int> &traceStack, string &parsingTable[rows][cols],
+	unordered_map<string, int> &WORD_STRINGS, unordered_map<char, int> &WORD_CHARS,
+	unordered_map<int, pair<string, int>> &RULES, unordered_map<int, string> &ERRORS);
 
 void nextWord(string &Language, string &nextWord)
 {
@@ -92,6 +92,7 @@ bool LanguageParse(string Language)
 		{ "","","","","","","","R28","R28","R28","R28","","","","","","","","","","","","","","","","","R28","","R28","","","","","","","","","","","","","","","","","" }
 	};
 	
+#pragma region unordered_maps
 	unordered_map<string, int> WORD_STRINGS{
 		{"program"		,69	},{	"var"		,70	},{	"begin"		,71	},{	"end."		,72	},{"integer",73	},{	"print"		,74	},
 		{"<prog>"		,99	},{	"<id>"		,100},{	"<id'>"		,101},{"<dec-list>"	,102},{"<dec>"	,103},{"<type>"		,104},
@@ -124,32 +125,45 @@ bool LanguageParse(string Language)
 		{1, "Expected ';'"},{2, "Expected ','"},{3, "Expected ':'"},{4, "Expected '('"},{5, "Expected ')'"}
 	};
 
+#pragma endregion
+
+#pragma region regex
 	regex REDUCE("^R\\d{1,2}");
 	regex SHIFT("^S\\d{1,2}");
 	regex ACCEPT("ACC");
 	regex ERROR("^E\\d");
-
+#pragma endregion
+	
+#pragma region bool
 	bool ever = true;
+	bool charByChar = false;
 	bool program = false;
 	bool var = false;
 	bool begin = false;
 	bool end = false;
+#pragma endregion
 
+#pragma region values
+	int changer;
 	int row;
 	int col;
 	int ruleNumber;
 	int rightRule;
 	int stringIndex = 0;
 	size_t pos;
+#pragma endregion
 
+#pragma region words
 	char currentWordChar;
 	string _leftRule;
 	string currentWord;
 	string tableString;
 	string errorString;
+#pragma endregion
 
 	stack<int> traceStack;
 
+#pragma region stack_commands
 	auto pop = [&]() {
 		int temp = traceStack.top();
 		traceStack.pop();
@@ -167,6 +181,7 @@ bool LanguageParse(string Language)
 			end = true;
 		traceStack.push(x);
 	};
+#pragma endregion
 
 	replace(Language.begin(), Language.end(), '\n', ' ');
 	
@@ -181,14 +196,16 @@ bool LanguageParse(string Language)
 			break;
 		}
 
-		if (WORD_STRINGS.find(currentWord) == WORD_STRINGS.end())
+		if (WORD_STRINGS.find(currentWord) != WORD_STRINGS.end())
 		{
-			if (!WordParse(traceStack, parsingTable, currentWord, WORD_STRINGS, WORD_CHARS, ERRORS, RULES)) 
-			{
-				cout << "unknown identifier" << endl;
-				break;
-			}
-			continue;
+			
+		}
+		else
+		{
+			charByChar = true;
+			changer = WordParse(charByChar, currentWord, traceStack, parsingTable,
+				WORD_STRINGS, WORD_CHARS, RULES, ERRORS);
+			charByChar = false;
 		}
 
 		col = WORD_STRINGS.at(currentWord);
@@ -255,98 +272,9 @@ bool LanguageParse(string Language)
 }
 
 template<size_t rows, size_t cols>
-bool WordParse(stack<int>& myStack, 
-					string (&parsingTable)[rows][cols], 
-					string word,
-					unordered_map<string, int>& WORD_STRING,
-					unordered_map<char, int>& WORD_CHAR,
-					unordered_map<int, string>& ERRORS,
-					unordered_map<int, pair<string, int>>& RULES)
+int WordParse(bool charByChar, string currentWord, stack<int> &traceStack, string (&parsingTable)[rows][cols],
+	unordered_map<string,int> &WORD_STRINGS, unordered_map<char,int> &WORD_CHARS,
+	unordered_map<int, pair<string,int>> &RULES, unordered_map<int,string> &ERRORS)
 {
-	regex REDUCE("^R\\d{1,2}");
-	regex SHIFT("^S\\d{1,2}");
-	regex ERROR("^E\\d");
-
-	bool RUN = true;
-
-	int _stringIndex = 0;
-	int _row;
-	int _col;
-	int _tempCol;
-	int _pushFinal;
-	int _ruleNumber;
-	int _rightRule;
-	int _popDump;
-
-	char _wordChar;
-	string _leftRule;
-	string _tableString;
-
-	stack<int> traceStack;
-
-	auto pop = [&]() {
-		int temp = traceStack.top();
-		traceStack.pop();
-		return temp;
-	};
-
-	auto push = [&](int x) {
-		traceStack.push(x);
-	};
-
-	_wordChar = word.at(_stringIndex);
-
-	while (RUN) {
-
-		_row = pop();
-		if (_row > OFFSET - 1)
-			break;
-
-		if (WORD_CHAR.find(_wordChar) == WORD_CHAR.end())
-		{
-			break;
-		}
-		_col = WORD_CHAR.at(_wordChar);
-
-		_tableString = parsingTable[_row][_col - OFFSET];
-
-		if (regex_match(_tableString, REDUCE)) {
-			_ruleNumber = stoi(_tableString.substr(1, _tableString.size()));
-			_leftRule = RULES.at(_ruleNumber).first;
-			_tempCol = WORD_STRING.at(_leftRule);
-			_rightRule = RULES.at(_ruleNumber).second;
-			for (int i = 0; i <(2 * _rightRule) - 1; i++)
-				_popDump = pop();
-			_row = pop();
-			_tableString = parsingTable[_row][_tempCol - OFFSET];
-			_pushFinal = stoi(_tableString);
-			push(_row);
-			push(_tempCol);
-			push(_pushFinal);
-		}
-		else if (regex_match(_tableString, SHIFT)) {
-			_tableString = _tableString.substr(1, _tableString.size());
-			if (_stringIndex < word.size())
-				_wordChar = word.at(++_stringIndex);
-			else
-				return true;
-			if (WORD_CHAR.find(_wordChar) == WORD_CHAR.end()) {
-				break;
-			}
-			_pushFinal = stoi(_tableString);
-			push(_row);
-			push(_col);
-			push(_pushFinal);
-		}
-		else if (regex_match(_tableString, ERROR)) {
-			_tableString = _tableString.substr(1, _tableString.size());
-			_ruleNumber = stoi(_tableString);
-			cout << ERRORS.at(_ruleNumber) << endl;
-		}
-		else {
-			cout << "invalid expression" << endl;
-			RUN = false;
-		}
-	}
-	return false;
+	return 0;
 }
