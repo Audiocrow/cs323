@@ -69,6 +69,7 @@ bool LanguageParse(string Language)
 #pragma endregion
 
 	replace(Language.begin(), Language.end(), '\n', ' ');
+	Language.append(" $");
 	
 	nextWord(Language, currentWord);
 	traceStack.push(0);
