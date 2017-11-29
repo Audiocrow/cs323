@@ -222,6 +222,7 @@ int WordParse(bool charByChar, string currentWord, stack<int> &traceStack, strin
 #pragma region values
 	int row;
 	int col;
+	int reduceCol;
 	int ruleNumber;
 	int rightRule;
 	int stringIndex;
@@ -284,14 +285,14 @@ int WordParse(bool charByChar, string currentWord, stack<int> &traceStack, strin
 		if (regex_match(tableString, REDUCE)) {
 			ruleNumber = stoi(tableString.substr(1, tableString.size()));
 			_leftRule = RULES.at(ruleNumber).first;
-			col = WORD_STRINGS.at(_leftRule);
+			reduceCol = WORD_STRINGS.at(_leftRule);
 			rightRule = RULES.at(ruleNumber).second;
 			for (int i = 0; i < (2 * rightRule) - 1; i++)
 				traceStack.pop();
 			row = pop();
-			tableString = parsingTable[row][col - OFFSET];
+			tableString = parsingTable[row][reduceCol - OFFSET];
 			push(row);
-			push(col);
+			push(reduceCol);
 			push(stoi(tableString.substr(1, tableString.size())));
 			if (!charByChar)
 			{
@@ -303,11 +304,7 @@ int WordParse(bool charByChar, string currentWord, stack<int> &traceStack, strin
 			push(row);
 			push(col);
 			push(stoi(tableString));
-			if (charByChar && i == currentWord.length())
-			{
-				return SHIFT_SUCCESS;
-			}
-			else if (!charByChar)
+			if ((charByChar && i == currentWord.length()) || !charByChar)
 			{
 				return SHIFT_SUCCESS;
 			}
