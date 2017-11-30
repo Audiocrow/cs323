@@ -1,11 +1,2 @@
-﻿  main.cpp
-e:\github\cs323\final_project\final_project\parse.h(274): warning C4018: '<': signed/unsigned mismatch
-  e:\github\cs323\final_project\final_project\parse.h(157): note: see reference to function template instantiation 'int WordParse<69,48>(bool,std::string,std::stack<int,std::deque<_Ty,std::allocator<_Ty>>> &,std::string (&)[69][48],std::unordered_map<std::string,_Ty,std::hash<_Kty>,std::equal_to<_Kty>,std::allocator<std::pair<const _Kty,_Ty>>> &,std::unordered_map<char,_Ty,std::hash<char>,std::equal_to<char>,std::allocator<std::pair<const char,_Ty>>> &,std::unordered_map<int,std::pair<std::string,int>,std::hash<int>,std::equal_to<_Ty>,std::allocator<std::pair<const int,std::pair<std::string,int>>>> &,std::unordered_map<int,std::string,std::hash<int>,std::equal_to<_Ty>,std::allocator<std::pair<const int,std::basic_string<char,std::char_traits<char>,std::allocator<char>>>>> &)' being compiled
-          with
-          [
-              _Ty=int,
-              _Kty=std::string
-          ]
-e:\github\cs323\final_project\final_project\parse.h(331): warning C4715: 'WordParse<69,48>': not all control paths return a value
-  Final_Project.vcxproj -> E:\GitHub\cs323\Final_Project\Debug\Final_Project.exe
-  Final_Project.vcxproj -> E:\GitHub\cs323\Final_Project\Debug\Final_Project.pdb (Partial PDB)
+﻿  Final_Project.vcxproj -> C:\Users\sean_\Documents\GitHub\cs323\Final_Project\Debug\Final_Project.exe
+  Final_Project.vcxproj -> C:\Users\sean_\Documents\GitHub\cs323\Final_Project\Debug\Final_Project.pdb (Partial PDB)
