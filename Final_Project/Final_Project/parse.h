@@ -145,9 +145,14 @@ bool LanguageParse(string Language)
 #pragma endregion
 
 	replace(Language.begin(), Language.end(), '\n', ' ');
-	Language.append(" $ ");
-	
 	nextWord(Language, currentWord);
+	if (currentWord != "program")
+	{
+		cout << "'program' is expected." << endl;
+		return false;
+	}
+	Language.append(" $ ");
+
 	traceStack.push(0);
 
 	for (; ever;) 
@@ -206,13 +211,6 @@ int WordParse(bool charByChar, string currentWord, stack<int> &traceStack, strin
 	unordered_map<int, pair<string, int>> &RULES, unordered_map<int, string> &ERRORS)
 {
 
-#pragma region bool
-	static bool isProgramPresent = false;
-	static bool isVarPresent = false;
-	static bool isBeginPresent = false;
-	static bool isEndPresent = false;
-#pragma endregion
-
 #pragma region values
 	static int row;
 	static int col;
@@ -236,14 +234,6 @@ int WordParse(bool charByChar, string currentWord, stack<int> &traceStack, strin
 	};
 
 	static auto push = [&](int x) {
-		if (x == 68)
-			isProgramPresent = true;
-		if (x == 69)
-			isVarPresent = true;
-		if (x == 70)
-			isBeginPresent = true;
-		if (x == 71)
-			isEndPresent = true;
 		traceStack.push(x);
 	};
 #pragma endregion
@@ -266,7 +256,7 @@ int WordParse(bool charByChar, string currentWord, stack<int> &traceStack, strin
 	}
 
 
-	for (int i = 0; i < currentWord.length();)
+	for (unsigned int i = 0; i < currentWord.length();)
 	{
 		row = pop();
 		if (row > OFFSET - 1)
@@ -296,7 +286,7 @@ int WordParse(bool charByChar, string currentWord, stack<int> &traceStack, strin
 			{
 				if (ruleNumber == 2)
 				{
-					ruleNumber == 4;
+					ruleNumber = 4;
 				}
 				if (ruleNumber == 3)
 				{
@@ -339,7 +329,7 @@ int WordParse(bool charByChar, string currentWord, stack<int> &traceStack, strin
 			}
 			
 		}
-		else if (regex_match(tableString, ACCEPT)/* && isProgramPresent && isVarPresent && isBeginPresent && isEndPresent*/)
+		else if (regex_match(tableString, ACCEPT))
 		{
 			return ACCEPT_FINAL;
 		}
@@ -348,26 +338,6 @@ int WordParse(bool charByChar, string currentWord, stack<int> &traceStack, strin
 			tableString = tableString.substr(1, tableString.size());
 			ruleNumber = stoi(tableString);
 			cout << ERRORS.at(ruleNumber) << endl;
-			i = currentWord.length();
-		}
-		else
-		{
-			if (!isProgramPresent)
-			{
-				cout << "'program' is expected." << endl;
-			}
-			if (!isVarPresent)
-			{
-				cout << "'var' is expected." << endl;
-			}
-			if (!isBeginPresent)
-			{
-				cout << "'begin' is expected." << endl;
-			}
-			if (!isEndPresent)
-			{
-				cout << "'end.' is expected." << endl;
-			}
 			i = currentWord.length();
 		}
 	}
