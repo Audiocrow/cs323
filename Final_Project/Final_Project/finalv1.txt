@@ -1,4 +1,4 @@
-program p2017;
+programn p2017 ;
 /* This program computes and prints the value
 	of an expression */
 var
@@ -11,6 +11,6 @@ begin
 	print(r   ); /*display r	*/
 
 	/*computer the value of the expression*/
-	p12=p1 * (q2r + 2 * r)	;
-	print(	p12	);	/*print the value of p12*/
+	p12 =p1 * (q2r + 2 * r)	;
+	print(	p12	);/*print the value of p12*/
 end.

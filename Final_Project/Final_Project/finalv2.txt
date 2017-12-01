@@ -1,4 +1,4 @@
-program p2017 ;
+program n p2017
 var
 p1 , q2r , r , p12 : integer ;
 begin
