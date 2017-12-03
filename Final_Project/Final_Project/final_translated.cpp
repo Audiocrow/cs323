@@ -6,7 +6,6 @@ int main() {
 	q2r = 4 ;
 	r = 5 ;
 	cout<<r<<endl;
-	p12 = p1 * ( q2r + 2 * r ) ;
 	cout<<p12<<endl;
 	return 0;
 }
